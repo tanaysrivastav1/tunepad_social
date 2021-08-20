@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+  
+  {% if posts|length == 0 %}
+    <div class="alert alert-danger" role="alert">
+        not find
+    </div>    
+  {% else %}
+    {% for post in posts %}
+        <div class="rounded media p-3 mb-3" style="background-color: rgba(242, 242, 242, 0.968)">
+            <img class="rounded float-left ml-3 mr-3" width="50" height="50" src={{url_for('static', filename='profile_pics/'+post.user.profile_pic)}}>
+            <div class="media-body">
+                <div class="article-metadata border-bottom">
+                    <a class="mr-2" href={{url_for('lookup_user_post', username=post.user.username)}}>
+                        {{ post.user.username }}
+                    </a>
+                    <small class="text-muted">{{ post.date}}</small>
+                </div> 
+                <h2 class="display mt-3">
+                    <a href={{url_for('lookup_post', post_id=post.id)}}>
+                    {{post.title}}
+                    </a>
+                </h2>
+
+                {% for tag in post.tags %}
+                    <button class="btn btn-outline-info"># {{tag}}</button>
+                {% endfor %} -->
+                
+                <p class="lead">
+                    {% set description = post.description.split() %}
+                    {% for word in description %}
+                        {% if word[0] == '#' %}
+                            <a href={{url_for('lookup_tag_post', tag=word[1:])}} class="text-info"> 
+                                {{ word }} 
+                            </a>
+                        {% else %}
+                            {{word}}
+                        {% endif %}
+                    {% endfor %}
+                </p>
+                
+                
+                <div class='text-center'>
+                    <img class="rounded img-fluid" width="400" height="400" src={{url_for('static', filename='artwork_pics/'+post.artwork)}}>
+                </div>
+
+                <div class='text-center'>
+                    <audio controls>
+                        <source src={{url_for('libraryProjectAudioPreview', project_id=post.project_id)}} type="audio/mpeg">
+                    </audio>
+                </div>
+           
+
+                <button data-like='{{current_user.has_liked_post(post)}}' id='like-{{ post.id }}' type="button" class="btn btn-info like-button" onclick="toggleLike(this, '{{ post.id }}')">unlike</button>
+                
+                <span id='num-like-{{ post.id }}' class='m-1'> {{ post.likes.count() }} </span>
+                <span> likes </span>
+                
+                <!-- The variable post is nothing! We are returning posts! We cannot use single post, we need to use the variable
+                posts -->
+
+    {% endfor %}
+  {% endif %}
+{% endblock content %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="container">
+                <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <!-- title -->
+    <div class="form-group">
+        {{ form.title.label(class="form-control-label") }}
+        {% if form.title.errors %}
+            {{ form.title(class="form-control is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.title.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.title(class="form-control") }}
+        {% endif %}
+    </div>
+
+    <!-- project id -->
+    <div class="form-group">
+        {{ form.project_id.label(class="form-control-label") }}
+        {% if form.project_id.errors %}
+            {{ form.project_id(class="form-control is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.project_id.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.project_id(class="form-control") }}
+        {% endif %}
+    </div>
+
+    <!-- description -->
+    <div class="form-group">
+        {{ form.description.label(class="form-control-label") }}
+        {% if form.description.errors %}
+            {{ form.description(class="form-control is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.description.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.description(class="form-control") }}
+        {% endif %}
+    </div>
+
+    <!-- artwork -->
+    <div class="form-group">
+        {{ form.artwork.label() }}
+        {{ form.artwork(class="form-control-file") }}
+        {% if form.artwork.errors %}
+            {% for error in form.artwork.errors %}
+                <span class="text-danger">{{ error }}</span></br>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- submit -->
+    <div class="form-group">
+        {{ form.submit(class="btn btn-info btn-lg")}}
+    </div>  
+</form>
+{% endblock content %}
